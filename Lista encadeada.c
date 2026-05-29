@@ -78,3 +78,49 @@ int buscarValor(NoInt *head, int valor) {
     }
     return -1;
 }
+
+// Parte 3 - Inverter lista
+void inverterLista(NoInt **head) {
+    NoInt *anterior = NULL;
+    NoInt *atual = *head;
+    NoInt *proximo = NULL;
+
+    while (atual != NULL) {
+        proximo = atual->prox;
+        atual->prox = anterior;
+        anterior = atual;
+        atual = proximo;
+    }
+
+    *head = anterior;
+}
+
+// Parte 4 - Dividir lista em duas
+void dividirLista(NoInt *head, NoInt **lista1, NoInt **lista2) {
+    if (head == NULL) {
+        *lista1 = NULL;
+        *lista2 = NULL;
+        return;
+    }
+
+    NoInt *lento = head;
+    NoInt *rapido = head;
+
+    while (rapido->prox != NULL && rapido->prox->prox != NULL) {
+        lento = lento->prox;
+        rapido = rapido->prox->prox;
+    }
+
+    *lista1 = head;
+    *lista2 = lento->prox;
+    lento->prox = NULL;
+}
+
+void liberarLista(NoInt *head) {
+    NoInt *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->prox;
+        free(temp);
+    }
+}
