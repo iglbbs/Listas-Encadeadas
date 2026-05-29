@@ -124,3 +124,71 @@ void liberarLista(NoInt *head) {
         free(temp);
     }
 }
+
+// Parte 5 - Playlist circular duplamente encadeada
+typedef struct No {
+    char musica[100];
+    struct No *prox;
+    struct No *ant;
+} No;
+
+void adicionarMusica(No **head, char *nome) {
+    No *novo = (No *)malloc(sizeof(No));
+    strcpy(novo->musica, nome);
+    novo->prox = NULL;
+    novo->ant = NULL;
+
+    if (*head == NULL) {
+        novo->prox = novo;
+        novo->ant = novo;
+        *head = novo;
+        return;
+    }
+
+    No *ultimo = (*head)->ant;
+    ultimo->prox = novo;
+    novo->ant = ultimo;
+    novo->prox = *head;
+    (*head)->ant = novo;
+}
+
+void proximaMusica(No **atual) {
+    if (*atual != NULL)
+        *atual = (*atual)->prox;
+}
+
+void musicaAnterior(No **atual) {
+    if (*atual != NULL)
+        *atual = (*atual)->ant;
+}
+
+void exibirPlaylist(No *head) {
+    if (head == NULL) {
+        printf("Playlist vazia!\n");
+        return;
+    }
+
+    No *temp = head;
+    do {
+        printf("[%s] <-> ", temp->musica);
+        temp = temp->prox;
+    } while (temp != head);
+    printf("(volta ao inicio)\n");
+}
+
+int totalMusicas(No *head) {
+    if (head == NULL) return 0;
+    int total = 0;
+    No *temp = head;
+    do {
+        total++;
+        temp = temp->prox;
+    } while (temp != head);
+    return total;
+}
+
+void tocarPlaylistCompleta(No *head) {
+    if (head == NULL) {
+        printf("Playlist vazia!\n");
+        return;
+    }
