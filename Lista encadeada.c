@@ -192,3 +192,92 @@ void tocarPlaylistCompleta(No *head) {
         printf("Playlist vazia!\n");
         return;
     }
+No *atual = head;
+    printf("\nTocando playlist:\n");
+    do {
+        printf("Tocando: %s\n", atual->musica);
+        atual = atual->prox;
+    } while (atual != head);
+    printf("Todas as musicas foram tocadas.\n");
+}
+
+void liberarPlaylist(No **head) {
+    if (*head == NULL) return;
+
+    No *atual = (*head)->prox;
+    while (atual != *head) {
+        No *temp = atual;
+        atual = atual->prox;
+        free(temp);
+    }
+    free(*head);
+    *head = NULL;
+}
+
+int main() {
+    printf("===== LISTA ENCADEADA =====\n\n");
+
+    NoInt *lista = NULL;
+
+    inserirFinal(&lista, 10);
+    inserirFinal(&lista, 20);
+    inserirFinal(&lista, 30);
+
+    printf("Lista original:\n");
+    exibirLista(lista);
+
+    inserirPosicao(&lista, 99, 1);
+    printf("\nDepois de inserir 99 na posicao 1:\n");
+    exibirLista(lista);
+
+    int pos = buscarValor(lista, 20);
+    printf("\nValor 20 encontrado na posicao: %d\n", pos);
+
+    inverterLista(&lista);
+    printf("\nLista invertida:\n");
+    exibirLista(lista);
+
+    NoInt *lista1 = NULL;
+    NoInt *lista2 = NULL;
+    dividirLista(lista, &lista1, &lista2);
+    printf("\nLista 1:\n");
+    exibirLista(lista1);
+    printf("Lista 2:\n");
+    exibirLista(lista2);
+
+    liberarLista(lista1);
+    liberarLista(lista2);
+
+    printf("\n===== PLAYLIST =====\n");
+
+    No *playlist = NULL;
+
+    adicionarMusica(&playlist, "Rock");
+    adicionarMusica(&playlist, "Jazz");
+    adicionarMusica(&playlist, "Pop");
+
+    printf("\nPlaylist:\n");
+    exibirPlaylist(playlist);
+    printf("\nTotal de musicas: %d\n", totalMusicas(playlist));
+
+    No *atual = playlist;
+    printf("\nMusica atual: %s\n", atual->musica);
+
+    proximaMusica(&atual);
+    printf("Proxima: %s\n", atual->musica);
+
+    proximaMusica(&atual);
+    printf("Proxima: %s\n", atual->musica);
+
+    proximaMusica(&atual);
+    printf("Proxima (circular): %s\n", atual->musica);
+
+    musicaAnterior(&atual);
+    printf("Anterior: %s\n", atual->musica);
+
+    tocarPlaylistCompleta(playlist);
+
+    liberarPlaylist(&playlist);
+
+    return 0;
+}
